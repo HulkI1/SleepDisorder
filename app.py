@@ -1,13 +1,16 @@
 import streamlit as st
 import joblib
 import numpy as np
+import psycopg2
+import os
 
-# Load model
+# Load ML model
 model = joblib.load("ml/model.pkl")
 scaler = joblib.load("ml/scaler.pkl")
 
-st.title("🛌 Sleep Disorder Prediction")
+st.title("🛌 Sleep Disorder Prediction App")
 
+# --- Form ---
 with st.form("sleep_form"):
     email = st.text_input("Email")
     age = st.number_input("Age", 1, 120)
@@ -22,6 +25,7 @@ with st.form("sleep_form"):
 
     submit = st.form_submit_button("Predict")
 
+# --- Helper functions ---
 def parse_bp(bp):
     try:
         if "/" in bp:
@@ -34,6 +38,7 @@ def parse_bp(bp):
 def binary(val):
     return 1 if val.lower() == "yes" else 0
 
+# --- Prediction ---
 if submit:
     features = [
         sleep_duration,
