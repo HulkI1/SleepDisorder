@@ -4,11 +4,23 @@ import numpy as np
 import psycopg2
 import os
 
-# Load ML model
-model = joblib.load("ml/model.pkl")
-scaler = joblib.load("ml/scaler.pkl")
+# Load ML model with error handling
+try:
+    model = joblib.load("ml/model.pkl")
+    scaler = joblib.load("ml/scaler.pkl")
+    model_loaded = True
+except Exception as e:
+    model_loaded = False
+    error_msg = str(e)
 
 st.title("🛌 Sleep Disorder Prediction App")
+
+# Display error if model failed to load
+if not model_loaded:
+    st.error(f"⚠️ Model loading error: {error_msg}")
+    st.info("The model files (ml/model.pkl and ml/scaler.pkl) are corrupted or missing. Please regenerate them by running your training script.")
+    st.stop()
+
 
 # --- Form ---
 with st.form("sleep_form"):

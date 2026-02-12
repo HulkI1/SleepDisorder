@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Disorder Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #050a14 0%, #0b1120 100%);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 0;
+            border-bottom: 1px solid #333;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #f39c12;
+        }
+
+        .header .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logout-btn {
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #e63946;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: rgba(11, 17, 32, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            backdrop-filter: blur(10px);
+        }
+
+        .card h3 {
+            color: #f39c12;
+            margin-bottom: 25px;
+            font-size: 20px;
+            border-bottom: 1px solid #f39c12;
+            padding-bottom: 15px;
+        }
+
+        .form-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-group.full {
+            grid-column: span 2;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(22, 33, 62, 0.6);
+            border: 1px solid #444;
+            color: white;
+            border-radius: 5px;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #f39c12;
+            background: rgba(22, 33, 62, 0.9);
+        }
+
+        button.submit-btn {
+            grid-column: span 2;
+            background: #f39c12;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        button.submit-btn:hover {
+            background: #e89d0f;
+        }
+
+        .result {
+            background: rgba(243, 156, 18, 0.1);
+            border-left: 4px solid #f39c12;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result h4 {
+            color: #f39c12;
+            margin-bottom: 10px;
+        }
+
+        .result p {
+            margin: 5px 0;
+            color: #ddd;
+        }
+
+        .severity-low { color: #2ecc71; }
+        .severity-moderate { color: #f39c12; }
+        .severity-high { color: #e74c3c; }
+        .severity-critical { color: #c0392b; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+
+        th {
+            background: rgba(243, 156, 18, 0.1);
+            color: #f39c12;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background: rgba(243, 156, 18, 0.05);
+        }
+
+        .action-btn {
+            background: #f39c12;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .action-btn:hover {
+            background: #e89d0f;
+        }
+
+        .no-data {
+            text-align: center;
+            color: #888;
+            padding: 40px 20px;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert.error {
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+            display: block;
+        }
+
+        .alert.success {
+            background: rgba(46, 204, 113, 0.1);
+            border: 1px solid #2ecc71;
+            color: #2ecc71;
+            display: block;
+        }
+
+        @media (max-width: 1024px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full,
+            button.submit-btn {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1>Sleep Disorder Analysis</h1>
+        <div class="user-info">
+            <span>Welcome, <strong id="userEmail"></strong></span>
+            <a href="/logout" class="logout-btn">LOGOUT</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="grid">
+        <!-- Form Card -->
+        <div class="card">
+            <h3>📋 New Sleep Analysis</h3>
+            
+            <div id="alert" class="alert"></div>
+
+            <form id="analysisForm" method="POST" action="/predict">
+                <div class="form-group full">
+                    <label>Phone Number</label>
+                    <input type="tel" name="phone_number" placeholder="e.g., 9876543210" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Age</label>
+                    <input type="number" name="age" min="1" max="120" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Gender</label>
+                    <select name="gender" required>
+                        <option value="">Select Gender</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group full">
+                    <label>Occupation</label>
+                    <input type="text" name="occupation" placeholder="e.g., Engineer" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Stress Level (1-10)</label>
+                    <input type="number" name="stress" min="1" max="10" value="5" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Blood Pressure</label>
+                    <input type="text" name="bp" placeholder="e.g., 120/80" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Heart Rate (bpm)</label>
+                    <input type="number" name="heart_rate" min="30" max="200" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Sleep Duration (hours)</label>
+                    <input type="number" name="sleep_duration" min="0" max="24" step="0.5" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Tea/Coffee (cups/day)</label>
+                    <input type="number" name="tea_coffee" min="0" max="10" required>
+                </div>
+
+                <div class="form-group">
+                    <label>BMI Category</label>
+                    <select name="bmi" required>
+                        <option value="">Select BMI</option>
+                        <option>Normal</option>
+                        <option>Overweight</option>
+                        <option>Obese</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Snoring Frequency</label>
+                    <select name="snoring" required>
+                        <option value="">Select Frequency</option>
+                        <option>Never</option>
+                        <option>Sometimes</option>
+                        <option>Every Night</option>
+                    </select>
+                </div>
+
+                <div class="form-group full">
+                    <label>Working Hours (per week)</label>
+                    <input type="number" name="work_hours" min="0" max="100" required>
+                </div>
+
+                <button type="submit" class="submit-btn">🔮 GENERATE PREDICTION</button>
+            </form>
+
+            <!-- Result Section -->
+            <div id="result" class="result">
+                <h4>Analysis Result</h4>
+                <p><strong>Diagnosis:</strong> <span id="diagnosis"></span></p>
+                <p id="fullDiagnosis"></p>
+                <p style="font-size: 0.9rem; color: #999; margin-top: 15px;">
+                    ⚠️ <em>Disclaimer: This is an AI-powered assessment. Please consult a healthcare provider for professional medical advice.</em>
+                </p>
+            </div>
+        </div>
+
+        <!-- History Card -->
+        <div class="card">
+            <h3>📊 Analysis History</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Result</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTable">
+                    <tr>
+                        <td colspan="3" class="no-data">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Get user email from URL or session
+    const urlParams = new URLSearchParams(window.location.search);
+    const email = urlParams.get('user') || 'User';
+    document.getElementById('userEmail').innerText = email;
+
+    // Load analysis history
+    async function loadHistory() {
+        try {
+            const response = await fetch('/analysis-history');
+            const data = await response.json();
+            const table = document.getElementById('historyTable');
+
+            if (data.length === 0) {
+                table.innerHTML = '<tr><td colspan="3" class="no-data">No analysis records found.</td></tr>';
+                return;
+            }
+
+            table.innerHTML = data.map(record => `
+                <tr>
+                    <td>${new Date(record.timestamp).toLocaleDateString()}</td>
+                    <td><span class="severity-${record.severity_color === 'green' ? 'low' : 
+                                       record.severity_color === 'orange' ? 'moderate' : 
+                                       record.severity_color === 'red' ? 'high' : 'critical'}">
+                        ${record.diagnosis}</span></td>
+                    <td><a href="/download-pdf/${record.id}" class="action-btn">📥 PDF</a></td>
+                </tr>
+            `).join('');
+        } catch (error) {
+            document.getElementById('historyTable').innerHTML = '<tr><td colspan="3" class="no-data">Error loading history.</td></tr>';
+        }
+    }
+
+    // Form submission
+    document.getElementById('analysisForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+        const alert = document.getElementById('alert');
+
+        try {
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (result.error) {
+                alert.className = 'alert error';
+                alert.textContent = '❌ ' + result.error;
+                return;
+            }
+
+            // Show success
+            alert.className = 'alert success';
+            alert.textContent = '✅ Analysis saved successfully!';
+
+            // Show result
+            const resultDiv = document.getElementById('result');
+            document.getElementById('diagnosis').textContent = result.diagnosis;
+            document.getElementById('fullDiagnosis').innerHTML = `<strong>${result.full_text}</strong>`;
+            resultDiv.classList.add('show');
+
+            // Reload history
+            setTimeout(loadHistory, 500);
+
+            // Clear form
+            e.target.reset();
+        } catch (error) {
+            alert.className = 'alert error';
+            alert.textContent = '❌ Error: ' + error.message;
+        }
+    });
+
+    // Load history on page load
+    loadHistory();
+</script>
+
+</body>
+</html>

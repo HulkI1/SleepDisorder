@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Sleep Disorder Analysis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #050a14 0%, #0b1120 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+        }
+
+        .admin-login-box {
+            background: rgba(11, 17, 32, 0.95);
+            padding: 60px;
+            border: 3px solid #f39c12;
+            border-radius: 10px;
+            text-align: center;
+            width: 100%;
+            max-width: 450px;
+            backdrop-filter: blur(20px);
+        }
+
+        .admin-login-box h2 {
+            color: #f39c12;
+            font-size: 32px;
+            margin-bottom: 25px;
+        }
+
+        .admin-login-box p {
+            color: #999;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            background: rgba(22, 33, 62, 0.7);
+            border: 1px solid #555;
+            color: white;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #f39c12;
+            background: rgba(22, 33, 62, 0.95);
+            box-shadow: 0 0 10px rgba(243, 156, 18, 0.3);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #f39c12;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #e89d0f;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(243, 156, 18, 0.3);
+        }
+
+        .back-link {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+        }
+
+        .back-link a {
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .back-link a:hover {
+            color: #f39c12;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert.error {
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+        }
+
+        .alert.error {
+            display: block;
+        }
+
+        .security-note {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 20px;
+            border-top: 1px solid #444;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="admin-login-box">
+    <h2>🔐 Admin Access</h2>
+    <p>Hospital Admin Portal</p>
+
+    {% if error %}
+    <div class="alert error">❌ {{ error }}</div>
+    {% endif %}
+
+    <form method="POST">
+        <div class="form-group">
+            <input type="password" name="password" placeholder="Enter Admin Password" required autofocus>
+        </div>
+
+        <button type="submit">UNLOCK</button>
+
+        <div class="back-link">
+            <a href="/login">← Back to User Login</a>
+        </div>
+
+        <div class="security-note">
+            🔒 This is a secure admin portal
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

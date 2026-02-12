@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - Sleep Disorder Analyzer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #050a14 0%, #0b1120 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .error-container {
+            text-align: center;
+            padding: 40px;
+            background: rgba(11, 17, 32, 0.8);
+            border-radius: 15px;
+            border: 2px solid #f39c12;
+            box-shadow: 0 0 30px rgba(243, 156, 18, 0.2);
+            max-width: 600px;
+        }
+
+        .error-code {
+            font-size: 120px;
+            font-weight: bold;
+            color: #f39c12;
+            margin: 20px 0;
+            text-shadow: 0 0 20px rgba(243, 156, 18, 0.5);
+        }
+
+        .error-title {
+            font-size: 32px;
+            color: #fff;
+            margin: 20px 0;
+        }
+
+        .error-message {
+            font-size: 16px;
+            color: #b0b8c1;
+            margin: 30px 0;
+            line-height: 1.6;
+        }
+
+        .error-illustration {
+            font-size: 80px;
+            margin: 30px 0;
+            opacity: 0.7;
+        }
+
+        .action-buttons {
+            margin-top: 40px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #f39c12;
+            color: #050a14;
+            font-weight: bold;
+        }
+
+        .btn-primary:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(243, 156, 18, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #f39c12;
+            border: 2px solid #f39c12;
+        }
+
+        .btn-secondary:hover {
+            background: #f39c12;
+            color: #050a14;
+            transform: translateY(-2px);
+        }
+
+        .suggestions {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #f39c12;
+            text-align: left;
+        }
+
+        .suggestions h3 {
+            color: #f39c12;
+            margin-bottom: 15px;
+        }
+
+        .suggestions ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .suggestions li {
+            padding: 8px 0;
+            color: #b0b8c1;
+        }
+
+        .suggestions li:before {
+            content: "→ ";
+            color: #f39c12;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-illustration">🔍</div>
+        <div class="error-code">404</div>
+        <h1 class="error-title">Page Not Found</h1>
+        <p class="error-message">
+            Sorry! The page you're looking for doesn't exist or has been moved. 
+            This might be due to a typo in the URL or the page may no longer be available.
+        </p>
+
+        <div class="action-buttons">
+            <a href="/" class="btn btn-primary">Go to Dashboard</a>
+            <a href="/login" class="btn btn-secondary">Back to Login</a>
+        </div>
+
+        <div class="suggestions">
+            <h3>What you can do:</h3>
+            <ul>
+                <li>Check the URL for typos</li>
+                <li>Return to the home page and navigate from there</li>
+                <li>Contact support if you believe this is an error</li>
+                <li>Refresh the page and try again</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

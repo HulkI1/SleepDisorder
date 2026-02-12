@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Error - Sleep Disorder Analyzer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #050a14 0%, #0b1120 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .error-container {
+            text-align: center;
+            padding: 40px;
+            background: rgba(11, 17, 32, 0.8);
+            border-radius: 15px;
+            border: 2px solid #e74c3c;
+            box-shadow: 0 0 30px rgba(231, 76, 60, 0.2);
+            max-width: 600px;
+        }
+
+        .error-code {
+            font-size: 120px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 20px 0;
+            text-shadow: 0 0 20px rgba(231, 76, 60, 0.3);
+        }
+
+        .error-title {
+            font-size: 32px;
+            color: #fff;
+            margin: 20px 0;
+        }
+
+        .error-message {
+            font-size: 16px;
+            color: #b0b8c1;
+            margin: 30px 0;
+            line-height: 1.6;
+        }
+
+        .error-illustration {
+            font-size: 80px;
+            margin: 30px 0;
+            opacity: 0.7;
+        }
+
+        .action-buttons {
+            margin-top: 40px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #e74c3c;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .btn-primary:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #e74c3c;
+            border: 2px solid #e74c3c;
+        }
+
+        .btn-secondary:hover {
+            background: #e74c3c;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .status-info {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e74c3c;
+            text-align: left;
+        }
+
+        .status-info h3 {
+            color: #e74c3c;
+            margin-bottom: 15px;
+        }
+
+        .status-info p {
+            color: #b0b8c1;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .error-id {
+            background: rgba(231, 76, 60, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #e74c3c;
+            margin-top: 15px;
+            text-align: left;
+        }
+
+        .error-id code {
+            color: #f39c12;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-illustration">⚙️</div>
+        <div class="error-code">500</div>
+        <h1 class="error-title">Internal Server Error</h1>
+        <p class="error-message">
+            Something went wrong on our end. Our team has been notified and is working to fix the issue. 
+            Please try again later or contact support if the problem persists.
+        </p>
+
+        <div class="action-buttons">
+            <a href="/" class="btn btn-primary">Go to Dashboard</a>
+            <a href="/logout" class="btn btn-secondary">Logout</a>
+        </div>
+
+        <div class="status-info">
+            <h3>What happened?</h3>
+            <p>
+                ✓ We've automatically logged this error<br>
+                ✓ Our technical team is investigating<br>
+                ✓ We'll work to restore service as soon as possible
+            </p>
+
+            <div class="error-id">
+                <strong>Error Tracking ID:</strong><br>
+                <code>{{ request.remote_addr }} - {{ now.strftime('%Y-%m-%d %H:%M:%S') }}</code>
+            </div>
+
+            <p style="margin-top: 15px; font-size: 14px;">
+                <strong>Need help?</strong> Please contact our support team with this error ID.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
