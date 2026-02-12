@@ -178,5 +178,25 @@
     "prediction": 3,
     "severity_color": "darkred",
     "timestamp": "2026-02-12T12:25:20.764322"
+  },
+  {
+    "id": "testlogin@gmail.com_20260212_123340",
+    "email": "testlogin@gmail.com",
+    "phone": "1234567890",
+    "age": 26,
+    "gender": "Male",
+    "occupation": "Engineer",
+    "stress": 5,
+    "bp": "120/80",
+    "heart_rate": 75,
+    "sleep_duration": 6.0,
+    "bmi": "Overweight",
+    "snoring": "Sometimes",
+    "work_hours": 50,
+    "diagnosis": "Sleep Deprivation",
+    "full_diagnosis": "Moderate Risk: Sleep Deprivation",
+    "prediction": 1,
+    "severity_color": "orange",
+    "timestamp": "2026-02-12T12:33:40.234623"
   }
 ]

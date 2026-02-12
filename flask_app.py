@@ -13,6 +13,7 @@ import numpy as np
 from functools import wraps
 import signal
 import sys
+import logging
 
 # Initialize Flask app
 app = Flask(__name__, template_folder='templates', static_folder='static')
@@ -37,6 +38,10 @@ ADMIN_PASSWORD = "admin123"
 
 # Create data directory
 os.makedirs("data", exist_ok=True)
+
+# Configure logging for debugging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s: %(message)s')
+app.logger.setLevel(logging.INFO)
 
 # Load ML model
 try:
@@ -67,19 +72,39 @@ def save_users(users):
         json.dump(users, f, indent=2)
 
 def load_analysis():
-    """Load analysis history from JSON"""
+    """Load analysis history from JSON (defensive)."""
     if not os.path.exists(ANALYSIS_FILE):
+        # create empty file to avoid empty-read issues
+        try:
+            with open(ANALYSIS_FILE, 'w') as f:
+                json.dump([], f)
+        except Exception:
+            app.logger.exception("Failed to create analysis file")
         return []
     try:
         with open(ANALYSIS_FILE, 'r') as f:
-            return json.load(f)
-    except:
+            content = f.read().strip()
+            if not content:
+                app.logger.warning("analysis file empty, initializing with []")
+                return []
+            return json.loads(content)
+    except Exception:
+        app.logger.exception("Failed to load analysis file, returning empty list")
+        # Attempt to recover by resetting file
+        try:
+            with open(ANALYSIS_FILE, 'w') as f:
+                json.dump([], f)
+        except Exception:
+            app.logger.exception("Failed to reset analysis file")
         return []
 
 def save_analysis(data):
     """Save analysis to JSON"""
-    with open(ANALYSIS_FILE, 'w') as f:
-        json.dump(data, f, indent=2)
+    try:
+        with open(ANALYSIS_FILE, 'w') as f:
+            json.dump(data, f, indent=2)
+    except Exception:
+        app.logger.exception("Failed to save analysis data")
 
 # ============================================================================
 # AUTHENTICATION DECORATORS
@@ -90,6 +115,10 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'user_email' not in session:
+            # For API/JSON requests return JSON 401 instead of redirect
+            content_type = request.headers.get('Content-Type', '')
+            if request.is_json or 'application/json' in content_type or request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return jsonify({'error': 'Authentication required'}), 401
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function
@@ -99,6 +128,9 @@ def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'admin_logged_in' not in session or not session.get('admin_logged_in'):
+            content_type = request.headers.get('Content-Type', '')
+            if request.is_json or 'application/json' in content_type or request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return jsonify({'error': 'Admin authentication required'}), 401
             return redirect(url_for('admin_login'))
         return f(*args, **kwargs)
     return decorated_function
@@ -197,7 +229,11 @@ def predict():
         return jsonify({'error': 'Model not available'}), 500
 
     try:
-        data = request.form
+        # Accept either JSON or form-encoded payloads
+        data = request.get_json(silent=True)
+        if not data:
+            data = request.form
+        app.logger.info('Predict request data: %s', dict(data))
         email = session.get('user_email')
 
         # Extract and validate features
@@ -269,6 +305,7 @@ def predict():
         history.append(record)
         save_analysis(history)
 
+        app.logger.info('Prediction saved for %s: %s', email, diagnosis)
         return jsonify({
             'success': True,
             'diagnosis': diagnosis,
@@ -278,6 +315,7 @@ def predict():
         })
 
     except Exception as e:
+        app.logger.exception('Prediction error')
         return jsonify({'error': str(e)}), 400
 
 @app.route('/analysis-history')
@@ -285,19 +323,32 @@ def predict():
 def get_history():
     """Get user's analysis history"""
     email = session.get('user_email')
-    history = load_analysis()
-    user_history = [h for h in history if h['email'] == email]
-    return jsonify(user_history)
+    try:
+        history = load_analysis()
+        if not isinstance(history, list):
+            app.logger.warning('analysis history not a list, coercing to []')
+            history = []
+        user_history = [h for h in history if h.get('email') == email]
+        app.logger.info('Returning %d history records for %s', len(user_history), email)
+        return jsonify(user_history)
+    except Exception as e:
+        app.logger.exception('Failed to get history')
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/download-pdf/<record_id>')
 @login_required
 def download_pdf(record_id):
     """Download PDF report"""
     email = session.get('user_email')
-    history = load_analysis()
-    record = next((h for h in history if h['id'] == record_id and h['email'] == email), None)
-    
+    try:
+        history = load_analysis()
+        record = next((h for h in history if h.get('id') == record_id and h.get('email') == email), None)
+    except Exception:
+        app.logger.exception('Failed to load history for PDF')
+        record = None
+
     if not record:
+        app.logger.warning('PDF requested for missing record %s by %s', record_id, email)
         return jsonify({'error': 'Report not found'}), 404
 
     # Generate simple PDF
@@ -374,6 +425,7 @@ def download_pdf(record_id):
             download_name=f"Sleep_Report_{record['id']}.pdf"
         )
     except Exception as e:
+        app.logger.exception('PDF generation error')
         return jsonify({'error': str(e)}), 500
 
 # ============================================================================

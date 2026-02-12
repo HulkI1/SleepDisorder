@@ -13,5 +13,10 @@
     "password": "scrypt:32768:8:1$uxnGHircubxiYhWg$b562a87ed924d0fe747c99d8cc52ddd84de5c91c32d9ff7c45c8a2cd17f160b8a1791df239376b855831ec4e9d719d3b2a7ff33e0c19bb9ec512a56036b4ba0c",
     "phone": "9998887777",
     "created_at": "2026-02-12T12:25:20.409831"
+  },
+  "testlogin@gmail.com": {
+    "password": "scrypt:32768:8:1$tKYdrWnRzUYzS3aV$c13128d5f56c2eb0b20da29d2a50da2b8c89f0533c8094b30522c0afb8a794b46c8de40eba5f40db70905f1b5d33e8c5b9588b1fa8e477b12d98fe4ba7c3a586",
+    "phone": "1234567890",
+    "created_at": "2026-02-12T12:26:36.496060"
   }
 }
