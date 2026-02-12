@@ -11,6 +11,8 @@ from datetime import datetime
 import joblib
 import numpy as np
 from functools import wraps
+import signal
+import sys
 
 # Initialize Flask app
 app = Flask(__name__, template_folder='templates', static_folder='static')
@@ -504,4 +506,15 @@ def server_error(e):
 # ============================================================================
 
 if __name__ == '__main__':
+    # Register signal handlers for graceful shutdown so port is released on exit
+    def _shutdown(signum, frame):
+        print(f"Received signal {signum}, shutting down Flask app...")
+        try:
+            sys.exit(0)
+        except SystemExit:
+            os._exit(0)
+
+    signal.signal(signal.SIGINT, _shutdown)
+    signal.signal(signal.SIGTERM, _shutdown)
+
     app.run(debug=True, port=5000)
