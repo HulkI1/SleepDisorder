@@ -1,6 +1,17 @@
-# 🎉 SLEEP DISORDER ANALYSIS PLATFORM - COMPLETE & READY!
+# 🚀 START HERE - Sleep Disorder Analysis Platform
 
-## ✅ PROJECT COMPLETION SUMMARY
+## ⚡ 60-Second Quick Start
+
+### Step 1: Start the Server
+```bash
+cd /workspaces/SleepDisorder
+python flask_app.py
+```
+
+### Step 2: Open Browser
+Visit: **http://localhost:5000**
+
+## ✅ Project Completion Summary
 
 Your Sleep Disorder Analysis Platform is **100% COMPLETE** and ready for deployment!
 

@@ -1,0 +1,17 @@
+{
+  "local_test_1770898418@example.com": {
+    "password": "scrypt:32768:8:1$ka5WleFMu5okCou8$6daab0672b49b82fbce182fcea7b7167f61048aec634a3713f4aa2d287f17c1facf84248b06c679b3b9e6be93b6a64ffff37f1e353e4e70bc884e226f66f2324",
+    "phone": "9998887777",
+    "created_at": "2026-02-12T12:13:38.404893"
+  },
+  "local_test_1770898771@example.com": {
+    "password": "scrypt:32768:8:1$hoIqN37quleP6lw9$eec896f5d4a190d5c2fd04aae887026fb36db4f06cf08fd19e911e2c7b8dd622bb9a59c93a882100b6bc24ce631f79ba90baab78b295799a6750729c7618fe80",
+    "phone": "9998887777",
+    "created_at": "2026-02-12T12:19:31.880214"
+  },
+  "local_test_1770899120@example.com": {
+    "password": "scrypt:32768:8:1$uxnGHircubxiYhWg$b562a87ed924d0fe747c99d8cc52ddd84de5c91c32d9ff7c45c8a2cd17f160b8a1791df239376b855831ec4e9d719d3b2a7ff33e0c19bb9ec512a56036b4ba0c",
+    "phone": "9998887777",
+    "created_at": "2026-02-12T12:25:20.409831"
+  }
+}
