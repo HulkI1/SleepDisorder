@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sleep Disorder Dashboard</title>
+
+<style>
+body {
+    background:#050a14;
+    color:white;
+    font-family:Arial;
+}
+.container {
+    max-width:1100px;
+    margin:40px auto;
+}
+.header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #333;
+    padding-bottom:20px;
+}
+.logout {
+    color:#ff4d4d;
+    text-decoration:none;
+    border:1px solid #ff4d4d;
+    padding:6px 16px;
+    border-radius:5px;
+    font-weight:bold;
+}
+.grid {
+    display:grid;
+    grid-template-columns:1.2fr 1fr;
+    gap:30px;
+    margin-top:30px;
+}
+.card {
+    background:#0b1120;
+    padding:25px;
+    border-radius:10px;
+    border:1px solid #333;
+}
+.card h3 {
+    color:#f39c12;
+    margin-bottom:20px;
+}
+input, select {
+    width:100%;
+    padding:10px;
+    background:#16213e;
+    border:1px solid #333;
+    color:white;
+    margin-top:5px;
+}
+label {
+    font-size:0.85rem;
+    color:#ccc;
+}
+.form-grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+.full {
+    grid-column:span 2;
+}
+button {
+    grid-column:span 2;
+    background:#f39c12;
+    color:white;
+    border:none;
+    padding:15px;
+    font-weight:bold;
+    cursor:pointer;
+    border-radius:5px;
+    margin-top:10px;
+}
+table {
+    width:100%;
+    border-collapse:collapse;
+}
+th, td {
+    padding:10px;
+    border-bottom:1px solid #333;
+}
+th {
+    color:#888;
+    text-align:left;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2>Welcome, <span style="color:#f39c12" id="userEmail"></span></h2>
+        <a href="/" class="logout">LOGOUT</a>
+    </div>
+
+    <div class="grid">
+        <!-- FORM -->
+        <div class="card">
+            <h3>New Sleep Analysis</h3>
+
+            <form action="/predict" method="POST" class="form-grid">
+                <input type="hidden" name="email" id="emailField">
+
+                <div class="full">
+                    <label>Phone Number</label>
+                    <input name="phone_number" required pattern="[0-9]{10}">
+                </div>
+
+                <div>
+                    <label>Age</label>
+                    <input type="number" name="age" required>
+                </div>
+
+                <div>
+                    <label>Gender</label>
+                    <select name="gender">
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Occupation</label>
+                    <input name="occupation" required>
+                </div>
+
+                <div>
+                    <label>Stress Level (1-10)</label>
+                    <input type="number" name="stress" required>
+                </div>
+
+                <div>
+                    <label>Blood Pressure</label>
+                    <input name="bp" placeholder="120/80" required>
+                </div>
+
+                <div>
+                    <label>Heart Rate</label>
+                    <input type="number" name="heart_rate" required>
+                </div>
+
+                <div>
+                    <label>Sleep Duration (hrs)</label>
+                    <input type="number" step="0.1" name="sleep_duration" required>
+                </div>
+
+                <div>
+                    <label>Tea/Coffee (cups)</label>
+                    <input type="number" name="tea_coffee" required>
+                </div>
+
+                <div>
+                    <label>BMI Category</label>
+                    <select name="bmi">
+                        <option>Normal</option>
+                        <option>Overweight</option>
+                        <option>Obese</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Snoring</label>
+                    <select name="snoring">
+                        <option>Never</option>
+                        <option>Sometimes</option>
+                        <option>Every Night</option>
+                    </select>
+                </div>
+
+                <div class="full">
+                    <label>Working Hours / Week</label>
+                    <input type="number" name="work_hours" required>
+                </div>
+
+                <button type="submit">GENERATE PREDICTION</button>
+            </form>
+        </div>
+
+        <!-- HISTORY -->
+        <div class="card">
+            <h3>Analysis History</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Result</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="history">
+                    <tr>
+                        <td colspan="3" style="text-align:center;color:#555;">No records found.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const email = params.get('user');
+document.getElementById('userEmail').innerText = email;
+document.getElementById('emailField').value = email;
+</script>
+
+</body>
+</html>

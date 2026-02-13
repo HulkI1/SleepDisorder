@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Portal - Sleep Disorder Analysis</title>
+    <style>
+        body { font-family: Arial; background: #050a14; padding: 20px; color: white; }
+        h1 { color: #f39c12; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #0b1120; }
+        th, td { border: 1px solid #333; padding: 10px; text-align: left; }
+        th { background: #f39c12; color: #050a14; font-weight: bold; }
+        td { color: #ccc; }
+        a { text-decoration: none; color: #f39c12; }
+        a:hover { color: #e67e22; }
+        .logout { float: right; background: #ff4d4d; color: white; padding: 8px 15px; border-radius: 5px; border: none; cursor: pointer; }
+        .logout:hover { background: #e74c3c; }
+        .container { max-width: 1200px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h1>Admin Dashboard</h1>
+            <a href="/admin-logout" class="logout">Logout</a>
+        </div>
+        
+        <h2 style="color: #f39c12;">All Sleep Disorder Reports</h2>
+        <div id="reports"></div>
+    </div>
+
+    <script>
+        // Fetch all reports and display in a table
+        fetch('/admin-reports')
+            .then(res => res.json())
+            .then(data => {
+                if (!data.length) {
+                    document.getElementById('reports').innerHTML = '<p>No reports found.</p>';
+                    return;
+                }
+                let html = '<table><tr><th>ID</th><th>Email</th><th>Date</th><th>Result</th><th>View Report</th></tr>';
+                data.forEach(r => {
+                    html += `<tr>
+                        <td>${r.id}</td>
+                        <td>${r.email}</td>
+                        <td>${r.date}</td>
+                        <td>${r.result}</td>
+                        <td><a href="/view-report?id=${r.id}" target="_blank">View</a></td>
+                    </tr>`;
+                });
+                html += '</table>';
+                document.getElementById('reports').innerHTML = html;
+            })
+            .catch(err => {
+                document.getElementById('reports').innerHTML = '<p>Error loading reports.</p>';
+            });
+    </script>
+</body>
+</html>
